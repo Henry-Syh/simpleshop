@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Simpleshop front-end</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script lang="javascript" type="text/javascript" src="./js/simpleshop.js"></script>
+
+</head>
+
+<body>
+
+    <script>
+        async function startApp() {
+
+
+            web3.eth.getBlockNumber(function (error, result) {
+                console.log(result)
+            })
+
+
+            mycontract.methods.sayHello().call(function (err, result) {
+                console.log(result);
+            })
+
+            //wallet
+            if (window.ethereum != null) {
+                state.web3 = new Web3(window.ethereum)
+                try {
+                    // Request account access if needed
+                    await window.ethereum.enable()
+                    // Acccounts now exposed
+                } catch (error) {
+                    // User denied account access...
+                    console.log(error);
+                }
+            }
+
+            // displayHelloWorld();
+
+            // var accountInterval = setInterval(function () {
+            //     // Check if account has changed
+            //     if (web3.eth.accounts[0] !== userAccount) {
+            //         userAccount = web3.eth.accounts[0];
+            //         // Call some function to update the UI with the new account
+            //         //updateInterface();
+            //         getHelloWorld().then(displayHelloWorld());
+            //     }
+            // }, 100);
+        }
+
+        function getHelloWorld() {
+            return simpleshop.methods.sayHello().call();
+        }
+
+        function displayHelloWorld() {
+            $('#main').empty();
+            $('#main').append('<div class="word">' + getHelloWorld() + '</div>');
+        }
+
+        window.addEventListener('load', function () {
+
+            // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+            // if (typeof web3 !== 'undefined') {
+            //     // Use Mist/MetaMask's provider
+            //     web3js = new Web3(web3.currentProvider);
+            // } else {
+            //     // Handle the case where the user doesn't have web3. Probably
+            //     // show them a message telling them to install Metamask in
+            //     // order to use our app.
+            // }
+
+            // Now you can start your app & access web3js freely:
+            startApp()
+
+        })
+    </script>
+
+    <div class="main" id="main">
+
+    </div>
+
+</body>
+
+</html>
