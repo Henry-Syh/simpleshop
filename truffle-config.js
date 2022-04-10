@@ -18,11 +18,8 @@
  *
  */
 
+const { projectId, mnemonic, etherscanApiKey } = require('./.secrets.json');
 const HDWalletProvider = require('@truffle/hdwallet-provider');
-
-const fs = require('fs');
-const mnemonic = fs.readFileSync(".secret").toString().trim();
-const rinkebyHttps = "https://rinkeby.infura.io/v3/66efdb368d63416582599fa47c84c42b";
 
 module.exports = {
   /**
@@ -36,15 +33,7 @@ module.exports = {
    */
 
   networks: {
-    // rinkeby: {
-    //   // Special function to setup the provider
-    //   provider: function () {
-    //     // Setting the provider with the Infura Rinkeby address and Token
-    //     return new HDWalletProvider(mnemonic, rinkebyHttps)
-    //   },
-    //   // Network id is 4 for Rinkeby
-    //   network_id: 4
-    // },
+    
     // Useful for testing. The `development` name is special - truffle uses it by default
     // if it's defined here and no other network is specified at the command line.
     // You should run a client (like ganache-cli, geth or parity) in a separate terminal
@@ -56,6 +45,15 @@ module.exports = {
      port: 8545,            // Standard Ethereum port (default: none)
      network_id: "*",       // Any network (default: none)
     },
+    rinkeby: {
+      // Special function to setup the provider
+      provider: function () {
+        // Setting the provider with the Infura Rinkeby address and Token
+        return new HDWalletProvider(mnemonic, `https://rinkeby.infura.io/v3/${projectId}`)
+      },
+      // Network id is 4 for Rinkeby
+      network_id: 4
+    }
     // Another network with more advanced options...
     // advanced: {
     // port: 8777,             // Custom port
@@ -81,6 +79,14 @@ module.exports = {
     // network_id: 2111,   // This network is yours, in the cloud.
     // production: true    // Treats this network as if it was a public net. (default: false)
     // }
+  },
+
+  // For etherscan verify
+  plugins: [
+    'truffle-plugin-verify'
+  ],
+  api_keys: {
+    etherscan: etherscanApiKey
   },
 
   // Set default mocha options here, use special reporters etc.

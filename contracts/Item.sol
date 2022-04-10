@@ -2,102 +2,137 @@
 pragma solidity >= 0.8.0;
 
 import "./helper/Stringhelper.sol";
-import "./helper/Byteshelper.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
-contract Item {
+contract Item{
+
     using Stringhelper for string;
-    using Byteshelper for bytes32;
 
     enum itemStatus {
-        open,
-        pedding,
-        sold,
-        close,
-        del
+        open, // 0
+        pedding, // 1
+        sold, // 2
+        close, // 3
+        del //4
     }
-
+    // ["item1649255614","Name 1",30000000000,"","0",0,"0",false]
+    // ["","Name 2",1000000000000000000,"","0",0,"0",false]
     struct itemInfo {
         string itemNo;
         string name;
-        uint price;
+        uint256 price; //wei
         string pic;
         itemStatus status;
-        uint ItemArrNo;
-        uint OwnArrNo;
+        uint itemsArraySeq;
+        uint myItemsMapSeq;
+        bool isLocked;
     }
 
-    mapping(address => itemInfo[]) public itemsOwn;
+    // Get all items
+    itemInfo[] internal itemsArray;
 
-    // For item, itemNo is unique.(itemNo => (address => item)).
-    // Throughout the test, that is ok even though address of (address=>item) is duplicate.
-    mapping(string => mapping(address => itemInfo)) public itemOne;
+    // Get one item and locked status chk
+    // itemNo => itemInfo
+    mapping(string => itemInfo) internal itemNoMap;
 
-    // For get all item[n][k] k: 0=>itenNo, 1=>itemName
-    //It's reverse when def. => item[k][n]
-    string[][] itemArray;
+    // Auth or get item owner address for selling
+    // itemNo => item owner
+    mapping(string => address) internal itemOwnerMap;
 
-    // (owner, itemNo, execute time)
-    event createItem(address indexed, string, uint);
-    event updateItem(address indexed, string, uint);
-    event deleteItem(address indexed, string, uint);
+    // Get my all items
+    mapping(address => itemInfo[]) internal myItemsMap;
 
-    function Create(itemInfo memory item) public returns(string memory itemNo) {
-        // chk item info
-        require(false == item.name.stringCompare(""), "item name can not leave blank.");
-        require(item.price > 0, "item price can not lower then 0.");
+    // EVENT (owner, itemInfo)
+    event createItemEvent(address indexed, itemInfo);
+    event modifyItemEvent(address indexed, itemInfo);
 
+    // c:create, u:update, d:delete, b:buy, ut:afterTx
+    modifier basicCheck(itemInfo memory item, string memory method){
+        require(item.name.stringCompare("") == false, "Item name can not leave blank.");
+        require(item.price > 0, "Item price can not lower then 0.");
+
+        if(method.stringCompare("u") || method.stringCompare("d")){
+            require(itemOwnerMap[item.itemNo] == msg.sender, "This is not your item or item number is wrong.");
+        }
+
+        if(method.stringCompare("u") || method.stringCompare("d") || method.stringCompare("b")){
+            require(item.itemNo.stringCompare("") == false, "Item number is blank");
+            require(itemNoMap[item.itemNo].isLocked == false, "Item is locked, operate later.");
+            itemNoMap[item.itemNo].isLocked = true;
+        }
+
+        _;
+
+        itemNoMap[item.itemNo].isLocked = false;
+    }
+
+    function hello() virtual public pure returns(string memory returnStr) {
+        returnStr = "Hello, this is item contract!";
+    }
+
+    function getAllItems() public view returns(itemInfo[] memory) {
+        return itemsArray;
+    }
+
+    function getOneItem(string calldata itemNo) public view returns(itemInfo memory) {
+        return itemNoMap[itemNo];
+    }
+
+    function getItemOwner(string calldata itemNo) public view returns(address) {
+        return itemOwnerMap[itemNo];
+    }
+
+    function getMyItems() public view returns(itemInfo[] memory) {
+        return myItemsMap[msg.sender];
+    }
+
+    function createItem(itemInfo memory item) public basicCheck(item, "c") {
+        
         // generate item_no
-        itemNo = Stringhelper.concate("item", Strings.toString(block.timestamp), false);
+        string memory itemNo = Stringhelper.concate("item", Strings.toString(block.timestamp), false);
+
         item.itemNo = itemNo;
-        item.ItemArrNo = itemArray.length;
-        item.OwnArrNo = itemsOwn[msg.sender].length;
+        item.itemsArraySeq = itemsArray.length;
+        item.myItemsMapSeq = myItemsMap[msg.sender].length;
+        item.isLocked = false;
 
         // create
-        emit createItem(msg.sender, itemNo, block.timestamp);
-        itemOne[itemNo][msg.sender] = item;
-        itemsOwn[msg.sender].push(item);
-        itemArray.push([itemNo,item.name]);
+        emit createItemEvent(msg.sender, item);
+
+        itemsArray.push(item);
+        itemNoMap[itemNo] = item;
+        itemOwnerMap[itemNo] = msg.sender;
+        myItemsMap[msg.sender].push(item);
     }
 
-    function ReadItems_ALL() public view returns(string[][] memory) {
-        return itemArray;
+    function updateItem(itemInfo memory item) public basicCheck(item, "u") {
+        emit modifyItemEvent(msg.sender, item);
+        uint itemsArraySeq = itemNoMap[item.itemNo].itemsArraySeq;
+        uint myItemsMapSeq = itemNoMap[item.itemNo].myItemsMapSeq;
+
+        itemsArray[itemsArraySeq].name = item.name;
+        itemsArray[itemsArraySeq].price = item.price;
+        itemsArray[itemsArraySeq].pic = item.pic;
+        itemsArray[itemsArraySeq].status = item.status;
+
+        itemNoMap[item.itemNo].name = item.name;
+        itemNoMap[item.itemNo].price = item.price;
+        itemNoMap[item.itemNo].pic = item.pic;
+        itemNoMap[item.itemNo].status = item.status;
+
+        myItemsMap[msg.sender][myItemsMapSeq].name = item.name;
+        myItemsMap[msg.sender][myItemsMapSeq].price = item.price;
+        myItemsMap[msg.sender][myItemsMapSeq].pic = item.pic;
+        myItemsMap[msg.sender][myItemsMapSeq].status = item.status;
     }
 
-    function ReadItems_Own() public view returns(itemInfo[] memory) {
-        return itemsOwn[msg.sender];
+    function deleteItem(itemInfo memory item) public basicCheck(item, "d") {
+        emit modifyItemEvent(msg.sender, item);
+
+        itemsArray[item.itemsArraySeq].status = itemStatus.del;
+        
+        itemNoMap[item.itemNo].status = itemStatus.del;
+        
+        myItemsMap[msg.sender][item.myItemsMapSeq].status = itemStatus.del;
     }
-
-    function Update(itemInfo memory uitem) public {
-        // chk
-        require(itemOne[uitem.itemNo][msg.sender].itemNo.stringCompare(uitem.itemNo), "This is not your item or item number is wrong.");
-
-        // update
-        emit updateItem(msg.sender, uitem.itemNo, block.timestamp);
-        (itemsOwn[msg.sender])[uitem.OwnArrNo] = uitem;
-        itemOne[uitem.itemNo][msg.sender] = uitem;
-        itemArray[uitem.ItemArrNo][1] = uitem.name;
-    }
-
-    // after sell
-    function Update(itemInfo memory uitem, address seller) public {
-        // chk
-        require(itemOne[uitem.itemNo][seller].itemNo.stringCompare(uitem.itemNo), "item number is wrong or seller is wrong");
-
-        // update
-        emit updateItem(seller, uitem.itemNo, block.timestamp);
-        (itemsOwn[seller])[uitem.OwnArrNo] = uitem;
-        itemOne[uitem.itemNo][seller] = uitem;
-        itemArray[uitem.ItemArrNo][1] = uitem.name;
-    }
-
-    function Del(itemInfo memory ditem) public {
-        require(itemOne[ditem.itemNo][msg.sender].itemNo.stringCompare(ditem.itemNo), "This is not your item or item number is wrong.");
-
-        // delete
-        emit deleteItem(msg.sender, ditem.itemNo, block.timestamp);
-        (itemsOwn[msg.sender])[ditem.OwnArrNo].status = itemStatus.del;
-        itemOne[ditem.itemNo][msg.sender].status = itemStatus.del;
-    }
-
 }

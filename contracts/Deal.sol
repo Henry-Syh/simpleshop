@@ -1,47 +1,53 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >= 0.8 .0;
+pragma solidity >= 0.8.0;
 
-// import "./Owner.sol";
+import "./Owner.sol";
 import "./Item.sol";
-import "./helper/Stringhelper.sol";
 
-contract Deal is Item{
+contract Deal is Item, Owner{
 
-    mapping(address=>mapping(address=>uint)) public transactionpMap;
+    event buyLog(address indexed from, address to, uint value, string log);
+    event transferLog(address indexed from, address to, uint value, bool isSuccess, string log);
 
-    // (buyer, seller, value)
-    event BuyEvent(address, address, uint);
+    function hello() override public pure returns(string memory returnStr ){
+        returnStr = "Hello, this is deal contract!";
+    }
 
-    function buy(address payable seller, string memory itemNo) public payable returns(bool) {
-        // chk
-        itemInfo memory _itemInfo = itemOne[itemNo][seller];
-        require(Stringhelper.stringCompare(_itemInfo.itemNo,""), "Cannot find the item.");
-        uint _price = _itemInfo.price*1e18; // WEI
-        require(msg.value >= _price, "Your balance is Insufficient.");
+    function buy(string calldata itemNo) public payable {
+        
+        buyProcess( getOneItem(itemNo), payable(getItemOwner(itemNo)) );
+        
+    }
 
+    function buyProcess(itemInfo memory item, address payable seller) private basicCheck(item, "b") {
 
-        emit BuyEvent(msg.sender, seller, _price);
-        transactionpMap[msg.sender][seller] += _price;
+        require(msg.value >= item.price, "Your balance is Insufficient.");
+        
+        emit buyLog(msg.sender, seller, item.price, item.itemNo);
 
-        // seller call
-        (bool isSuccess, ) = transfer(seller, transactionpMap[msg.sender][seller]);
-        transactionpMap[msg.sender][seller] -= _price;
+        transfer(seller, item.price);
 
         //update
-        _itemInfo.status = itemStatus.sold;
-        Item.Update(_itemInfo, seller);
+        item.status = itemStatus.close;
+        uint itemsArraySeq = itemNoMap[item.itemNo].itemsArraySeq;
+        uint myItemsMapSeq = itemNoMap[item.itemNo].myItemsMapSeq;
 
-        return isSuccess;
+        itemsArray[itemsArraySeq].status = item.status;
+        itemNoMap[item.itemNo].status = item.status;
+        myItemsMap[seller][myItemsMapSeq].status = item.status;
+        itemOwnerMap[item.itemNo] = msg.sender;
+
     }
 
     function transfer(address payable _to, uint price) public payable returns(bool isSuccess, bytes memory data){
-        // The price must be wei unit
-
-        require(address(this).balance >= price, "This price is much more than contract wallet.");
+        
+        if(address(this).balance < price){
+            emit buyLog(msg.sender, _to, price, "This value is greater than contract wallet.");
+            revert("This value is greater than contract wallet.");
+        }
+        
         (isSuccess, data) = _to.call {value: price}("");
-    }
+        emit transferLog(msg.sender, _to, price, isSuccess, "");
 
-    function getContractBalance() public view returns (uint) {
-        return address(this).balance;
     }
 }

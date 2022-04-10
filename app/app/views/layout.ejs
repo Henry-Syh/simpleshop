@@ -1,0 +1,125 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>Welcome to Simpleshop</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../public/stylesheets/main.css" />
+</head>
+
+<body class="homepage is-preload">
+
+    <div id="page-wrapper">
+
+        <!-- Header -->
+        <section id="header">
+            <div class="container">
+
+                <!-- Logo -->
+                <h1 id="logo"><a href="#">SimpleShop</a></h1>
+                <p>A decentralized place to deal with each other.</p>
+
+                <!-- Nav -->
+                <nav id="nav">
+                    <ul>
+                        <li><a href="#" id="home" class="icon solid fa-home"><span>Home</span></a></li>
+                        <li id="shopBar" style="display:none">
+                            <a href="#" id="shop" class="icon solid fa-shopping-basket"><span>Shop</span></a>
+                        </li>
+                        <li id="myBar" style="display:none">
+                            <a href="#" class="icon solid fa-cog"><span>My</span></a>
+                            <ul>
+                                <li><a href="#" id="mystore" class="button icon solid fa-store"
+                                        onclick="mystorePageController()">My store</a></li>
+                                <li><a href="#" id="sell" class="button icon solid"
+                                        onclick="sellPageInicial()">sell</a></li>
+                            </ul>
+                        </li>
+                        <li id="walletBar" style="display:none">
+                            <a href="#" id="connectWallet" class="icon solid fa-wallet"><span>Connect Wallet</span></a>
+                        </li>
+                        <li id="diswalletBar" style="display:none">
+                            <a href="#" id="disconnectWallet" class="icon solid fa-wallet"><span>Disconnect
+                                    Wallet</span></a>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li id="addressBar" style="display:none"></li>
+                    </ul>
+                </nav>
+
+            </div>
+        </section>
+
+        <!-- Features -->
+        <section id="features"></section>
+        <%- body -%>
+        
+        <!-- Footer -->
+        <section id="footer">
+            <div class="container">
+                <header>
+                    <h2>Questions or comments? <strong>Get in touch:</strong></h2>
+                </header>
+
+                <div class="row aln-center">
+                    <i class="icon brands fa-github">
+                        <a href="https://github.com/Henry-Syh">Github</a>
+                    </i>
+                    <i class="icon brands fa-linkedin">
+                        <a href="https://www.linkedin.com/henrysyh">Linkedin</a>
+                    </i>
+                    <i class="icon brands fa-facebook-f">
+                        <a href="https://www.facebook.com/profile.php?id=100006345760931">facebook</a>
+                    </i>
+                    <i class="icon brands fa-instagram">
+                        <a href="https://www.instagram.com/henry.syh/">instagram</a>
+                    </i>
+                    <i class="icon brands fa-telegram">
+                        <a href="https://t.me/HenrySYH">Telegram</a>
+                    </i>
+                    <i class="icon brands fa-line">
+                        <a href="https://line.me/ti/p/MRh_gGG3py">LINE</a>
+                    </i>
+                </div>
+            </div>
+            <div id="copyright" class="container">
+                <ul class="links">
+                    <li>&copy; Untitled. All rights reserved.</li>
+                    <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+                </ul>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="../public/javascripts/jquery.min.js"></script>
+    <script src="../public/javascripts/jquery.dropotron.min.js"></script>
+    <script src="../public/javascripts/browser.min.js"></script>
+    <script src="../public/javascripts/breakpoints.min.js"></script>
+    <script src="../public/javascripts/util.js"></script>
+    <script src="../public/javascripts/main.js"></script>
+
+    <!--  -->
+
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+
+    <!-- <script src="assets/js/Module/contractModule.js" type="module"></script>
+    <script src="assets/js/Models/itemModel.js" type="module"></script>
+    <script src="assets/js/Repository/itemRepository.js" type="module"></script>
+
+    <script src="assets/js/controller/indexController.js"></script>
+    <script src="assets/js/controller/mystorePageController.js"></script>
+    <script src="assets/js/controller/sellPageController.js"></script>
+
+    <script src="assets/js/Service/itemGetService.js"></script>
+
+    <script src="assets/js/Utilities/ethereumUtility.js"></script>
+    <script src="assets/js/Utilities/itemParamUtility.js"></script> -->
+
+
+</body>
+
+</html>
