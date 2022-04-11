@@ -9,7 +9,7 @@ async function shopPageInitial(){
             $(`#features > div > div `).append(`<div class="col-4 col-6-medium col-12-small">
 
             <section>
-                <a href="#" class="image featured"><img src="/public/images/SimpleShop.png" alt="" /></a>
+                <a href="#" class="image featured"><img src="/images/SimpleShop.png" alt="" /></a>
                 <header>
                     <h3>${item.name}</h3>
                 </header>
@@ -50,7 +50,7 @@ async function shopPageHappyBuy(itemNo) {
         return;
     }
 
-    if(itemNo == null || item == `` || item == undefined){ alert(`no item number`); return; }
+    if(itemNo == null || itemNo == `` || itemNo == undefined){ alert(`no item number`); return; }
 
     //condition the item's owner
     let owner = await getItemOwnerSrv(itemNo);

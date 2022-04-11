@@ -2,9 +2,11 @@ async function getOwnSrv(){
 
     const { itemRepo } = await import(`../Repository/itemRepository.js`);
 
+    showBlock();
     const item = new itemRepo();
     await item.init();
     let items = await item.getMyItems();
+    hideBlock();
 
     const { itemModel } = await import(`../Models/itemModel.js`);
 
@@ -23,9 +25,11 @@ async function gatAllSrv(){
 
     const { itemRepo } = await import(`../Repository/itemRepository.js`);
 
+    showBlock();
     const item = new itemRepo();
     await item.init();
     let items = await item.getAllItems();
+    hideBlock();
 
     const { itemModel } = await import(`../Models/itemModel.js`);
 
@@ -45,9 +49,11 @@ async function getOneSrv(itemNo){
 
     const { itemRepo } = await import(`../Repository/itemRepository.js`);
 
+    showBlock();
     const item = new itemRepo();
     await item.init();
     let aItem = await item.getOneItem(itemNo);
+    hideBlock();
 
     const { itemModel } = await import(`../Models/itemModel.js`);
     let model = new itemModel(aItem.itemNo, aItem.name, await getEtherfromWei(aItem.price, 'ether'), aItem.pic, aItem.status);

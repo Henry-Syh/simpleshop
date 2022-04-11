@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity >= 0.8.0;
 
 import "./Owner.sol";
@@ -19,23 +19,13 @@ contract Deal is Item, Owner{
         
     }
 
-    function buyProcess(itemInfo memory item, address payable seller) private basicCheck(item, "b") {
+    function buyProcess(itemInfo memory item, address payable seller) private buyChk(item, seller) {
 
-        require(msg.value >= item.price, "Your balance is Insufficient.");
-        
         emit buyLog(msg.sender, seller, item.price, item.itemNo);
 
         transfer(seller, item.price);
 
-        //update
-        item.status = itemStatus.close;
-        uint itemsArraySeq = itemNoMap[item.itemNo].itemsArraySeq;
-        uint myItemsMapSeq = itemNoMap[item.itemNo].myItemsMapSeq;
-
-        itemsArray[itemsArraySeq].status = item.status;
-        itemNoMap[item.itemNo].status = item.status;
-        myItemsMap[seller][myItemsMapSeq].status = item.status;
-        itemOwnerMap[item.itemNo] = msg.sender;
+        changeItemOwner(item, seller);
 
     }
 
@@ -50,4 +40,5 @@ contract Deal is Item, Owner{
         emit transferLog(msg.sender, _to, price, isSuccess, "");
 
     }
+
 }

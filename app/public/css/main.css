@@ -7,6 +7,38 @@
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 */
 
+.block {
+	height: 500px;
+	background-color: rgb(139, 132, 131);
+	opacity: 0.9;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
+.loading {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
+.blockUI {
+	position: absolute;           
+	top: 0px;
+	left: 0px;
+	display: none;
+
+
+}
+
+.border-b {
+	border: 2px solid black;
+}
+
+.block-full-w {
+	width: 100%
+}
+
 html, body, div, span, applet, object,
 iframe, h1, h2, h3, h4, h5, h6, p, blockquote,
 pre, a, abbr, acronym, address, big, cite,
@@ -2353,11 +2385,17 @@ input, select, textarea {
 				padding: 10em 0 7em 0;
 			}
 
-		/* Nav */
-
-			#nav {
+		/* LOGO */
+			
+			#logo {
 				display: none;
 			}
+
+		/* Nav */
+
+			/* #nav {
+				display: none;
+			} */
 
 		/* Nav */
 

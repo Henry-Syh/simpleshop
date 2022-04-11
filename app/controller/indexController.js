@@ -75,3 +75,24 @@ async function changeBar(addressExist) {
 
     }
 }
+
+function showBlock() {
+
+    let blockUI = document.querySelector(".blockUI");
+    let block = document.querySelector('.block');
+    let load = document.querySelector('.loading');
+    let scrollH = document.documentElement.scrollHeight; //計算整個頁面的高度(含scrollbar)
+    let wh = window.innerHeight; //計算可見視窗的高度，用來處理loading圖示的垂直居中
+    blockUI.setAttribute('style', `height:${scrollH}px`);
+    block.setAttribute('style', `height:${scrollH}px`);
+    load.setAttribute('style', `height:${wh}px;text-align: center; line-height:${wh}px`);
+    blockUI.setAttribute('style', 'display:inline; z-index:999999');
+
+}
+
+function hideBlock(){
+
+    let blockUI = document.querySelector(".blockUI");
+    blockUI.setAttribute('style', 'display:none'); 
+
+}

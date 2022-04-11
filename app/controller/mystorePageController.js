@@ -7,7 +7,7 @@ async function mystorePageInitial(){
         $(`#features > div > div `).append(`<div class="col-4 col-6-medium col-12-small">
 
                                             <section>
-                                                <a href="#" class="image featured" onclick="itemPageController('${item.itemNo}')"><img src="/public/images/SimpleShop.png" alt="" /></a>
+                                                <a href="#" class="image featured" onclick="itemPageController('${item.itemNo}')"><img src="/images/SimpleShop.png" alt="" /></a>
                                                 <header>
                                                     <h3>${item.name}</h3>
                                                 </header>

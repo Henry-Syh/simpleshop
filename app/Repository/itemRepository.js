@@ -33,8 +33,9 @@ export class itemRepo {
         if (await isAccountConnected() && await web3.utils.isAddress(await getNowAccount())) {
 
             try {
-
+                
                 let items = await this.instance.methods.getAllItems().call();
+
                 console.log(items);
                 return items;
 

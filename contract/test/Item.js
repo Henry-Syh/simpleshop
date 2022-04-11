@@ -20,12 +20,10 @@ contract("Item", async accounts => {
             ItemArrNo: 0,
             OwnArrNo: 0,
         };
-        // ["this is temp no", "this is temp name", 10, "pic", 0, 0, 0]
-        // ["this is temp no2", "this is temp name2", 100, "pic", 0, 0, 0]
-        // ["item1648471159", "this is temp name3", 1000, "pic", 0, 0, 0]
-
-        // item1648471159 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4
-        // item1648471601
+        
+        // ["item1649255614","Name 1",30000000000,"","0",0,"0",false]
+        // ["","Name 1",1,"","0",0,"0",false]
+        
         let _itemNo1 = await _item.Create(itemInfo, {from:accounts[1]});
         // console.log(_itemNo1);
 

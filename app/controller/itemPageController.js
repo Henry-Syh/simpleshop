@@ -1,7 +1,5 @@
-async function itemPageInitial(itemNo){
+async function itemPageInitial(){
 
-    if(itemNo == null || itemNo == `` || itemNo == undefined){ alert(`no item number`); return; }
-    
     let itemModel = JSON.parse(window.localStorage.getItem(`aitem`));
     
     $(`input[name*="itemNoU"]`).val(itemModel.itemNo);
@@ -13,6 +11,7 @@ async function itemPageInitial(itemNo){
     window.localStorage.clear();
 }
 
+// CALL this fn
 async function itemPageController(itemNo){
 
     if(itemNo == null || itemNo == `` || itemNo == undefined){ alert(`no item number`); return; }
@@ -42,6 +41,7 @@ async function itemPageHappyUpdate(){
     // inspect parameters
     if (itemName == ``) {alert(`item Name is empty`); return;}
     if (itemPrice < 0 || itemPrice == ``){alert(`item price is lower than 0`); return;}
+    if (itemStatus != 0){ alert(`Sorry the item can't buy now`); return;}
     
     const { itemModel  } = await import(`../Models/itemModel.js`);
     
@@ -54,4 +54,6 @@ async function itemPageHappyUpdate(){
 
     await itemUpdate(param);    
     await itemPageController(param.itemNo);
+
+    await mystorePageController();
 }

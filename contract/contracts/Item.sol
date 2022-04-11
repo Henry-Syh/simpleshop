@@ -15,8 +15,7 @@ contract Item{
         close, // 3
         del //4
     }
-    // ["item1649255614","Name 1",30000000000,"","0",0,"0",false]
-    // ["","Name 2",1000000000000000000,"","0",0,"0",false]
+
     struct itemInfo {
         string itemNo;
         string name;
@@ -48,22 +47,48 @@ contract Item{
 
     // c:create, u:update, d:delete, b:buy, ut:afterTx
     modifier basicCheck(itemInfo memory item, string memory method){
+        
         require(item.name.stringCompare("") == false, "Item name can not leave blank.");
         require(item.price > 0, "Item price can not lower then 0.");
 
         if(method.stringCompare("u") || method.stringCompare("d")){
             require(itemOwnerMap[item.itemNo] == msg.sender, "This is not your item or item number is wrong.");
-        }
-
-        if(method.stringCompare("u") || method.stringCompare("d") || method.stringCompare("b")){
             require(item.itemNo.stringCompare("") == false, "Item number is blank");
             require(itemNoMap[item.itemNo].isLocked == false, "Item is locked, operate later.");
-            itemNoMap[item.itemNo].isLocked = true;
+
+            lockStatus(item, true, msg.sender);
         }
 
         _;
 
-        itemNoMap[item.itemNo].isLocked = false;
+        lockStatus(item, false,  msg.sender);
+    }
+
+    modifier buyChk(itemInfo memory item, address seller){
+
+        require(item.name.stringCompare("") == false, "Item name can not leave blank.");
+        require(item.price > 0, "Item price can not lower then 0.");
+
+        require(item.itemNo.stringCompare("") == false, "Item number is blank");
+        require(itemNoMap[item.itemNo].isLocked == false, "Item is locked, operate later.");
+        require(item.status == itemStatus.open, "Item status is not open");
+        require(msg.sender != itemOwnerMap[item.itemNo], "Don't buy your stuff");
+        require(msg.value >= item.price, "Your balance is Insufficient.");
+
+        lockStatus(item, true,  seller);
+
+        _;
+
+        lockStatus(item, false,  msg.sender);
+
+    }
+
+    function lockStatus(itemInfo memory item, bool lock, address addr) private {
+        
+        itemsArray[item.itemsArraySeq].isLocked = lock;
+        itemNoMap[item.itemNo].isLocked = lock;
+        myItemsMap[addr][item.myItemsMapSeq].isLocked = lock;
+
     }
 
     function hello() virtual public pure returns(string memory returnStr) {
@@ -127,6 +152,7 @@ contract Item{
     }
 
     function deleteItem(itemInfo memory item) public basicCheck(item, "d") {
+        /**incomplete */
         emit modifyItemEvent(msg.sender, item);
 
         itemsArray[item.itemsArraySeq].status = itemStatus.del;
@@ -135,4 +161,42 @@ contract Item{
         
         myItemsMap[msg.sender][item.myItemsMapSeq].status = itemStatus.del;
     }
+
+    function changeItemOwner(itemInfo memory boughtItem, address oriOwner) internal {
+
+        uint oriMyItemSeq = boughtItem.myItemsMapSeq;
+
+        // update boughtItem parameters
+        boughtItem.status = itemStatus.close;
+        boughtItem.myItemsMapSeq = myItemsMap[msg.sender].length;
+
+        // update itemsArray , itemNoMap and itemOwnerMap
+        itemsArray[boughtItem.itemsArraySeq] = boughtItem;
+        itemNoMap[boughtItem.itemNo] = boughtItem;
+        itemOwnerMap[boughtItem.itemNo] = msg.sender;
+
+        // create item to myItemsMap ( for buyer )
+        myItemsMap[msg.sender].push(boughtItem);
+
+        /* using last item to replace the original item position ( for seller )*/
+        // original owner only have one or just sell last one
+        if(myItemsMap[oriOwner].length == 1 || oriMyItemSeq == myItemsMap[oriOwner].length-1){
+            myItemsMap[oriOwner].pop();
+        }
+        else {
+            // get last item info
+            itemInfo memory lastItem = myItemsMap[oriOwner][myItemsMap[oriOwner].length-1];
+
+            // update lastItem seq
+            lastItem.myItemsMapSeq = oriMyItemSeq;
+            itemsArray[lastItem.itemsArraySeq] = lastItem;
+            itemNoMap[lastItem.itemNo] = lastItem;
+
+            // replace and pop last item
+            myItemsMap[oriOwner][oriMyItemSeq] = lastItem;
+            myItemsMap[oriOwner].pop();
+        }
+
+    }
+
 }
