@@ -5,31 +5,19 @@
     <title>Welcome to Simpleshop</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="public/css/main.css" />
+    <link rel="stylesheet" href="../public/stylesheets/main.css" />
 </head>
 
 <body class="homepage is-preload">
 
     <div id="page-wrapper">
 
-        <section>
-            <!-- <button onclick="showBlock()">Show Block</button> -->
-                <div class="blockUI block-full-w ">
-                    <div class="block block-full-w"></div>
-                    <div class="loading block-full-w" style="text-align: center;">
-                        <img alt="" src="/images/loading.gif">
-                        <p style="line-height: 24px;">loading...</p>
-                    </div>
-                </div>
-            
-        </section>
-
         <!-- Header -->
         <section id="header">
             <div class="container">
 
                 <!-- Logo -->
-                <h1 id="logo"><a href="index.html">SimpleShop</a></h1>
+                <h1 id="logo"><a href="#">SimpleShop</a></h1>
                 <p>A decentralized place to deal with each other.</p>
 
                 <!-- Nav -->
@@ -37,7 +25,7 @@
                     <ul>
                         <li><a href="#" id="home" class="icon solid fa-home"><span>Home</span></a></li>
                         <li id="shopBar" style="display:none">
-                            <a href="#" id="shop" class="icon solid fa-shopping-basket" onclick="shopPageController()"><span>Shop</span></a>
+                            <a href="#" id="shop" class="icon solid fa-shopping-basket"><span>Shop</span></a>
                         </li>
                         <li id="myBar" style="display:none">
                             <a href="#" class="icon solid fa-cog"><span>My</span></a>
@@ -45,7 +33,7 @@
                                 <li><a href="#" id="mystore" class="button icon solid fa-store"
                                         onclick="mystorePageController()">My store</a></li>
                                 <li><a href="#" id="sell" class="button icon solid"
-                                        onclick="sellPageInitial()">sell</a></li>
+                                        onclick="sellPageInicial()">sell</a></li>
                             </ul>
                         </li>
                         <li id="walletBar" style="display:none">
@@ -66,7 +54,8 @@
 
         <!-- Features -->
         <section id="features"></section>
-
+        <%- body -%>
+        
         <!-- Footer -->
         <section id="footer">
             <div class="container">
@@ -106,36 +95,29 @@
     </div>
 
     <!-- Scripts -->
-    <script src="public/js/jquery.min.js"></script>
-    <script src="public/js/jquery.dropotron.min.js"></script>
-    <script src="public/js/browser.min.js"></script>
-    <script src="public/js/breakpoints.min.js"></script>
-    <script src="public/js/util.js"></script>
-    <script src="public/js/main.js"></script>
+    <script src="../public/javascripts/jquery.min.js"></script>
+    <script src="../public/javascripts/jquery.dropotron.min.js"></script>
+    <script src="../public/javascripts/browser.min.js"></script>
+    <script src="../public/javascripts/breakpoints.min.js"></script>
+    <script src="../public/javascripts/util.js"></script>
+    <script src="../public/javascripts/main.js"></script>
 
     <!--  -->
 
     <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
 
-    <script src="/Module/contractModule.js" type="module"></script>
-    <script src="/Models/itemModel.js" type="module"></script>
-    <script src="/Repository/itemRepository.js" type="module"></script>
-    <script src="/Repository/dealRepository.js" type="module"></script>
+    <!-- <script src="assets/js/Module/contractModule.js" type="module"></script>
+    <script src="assets/js/Models/itemModel.js" type="module"></script>
+    <script src="assets/js/Repository/itemRepository.js" type="module"></script>
 
-    <script src="/controller/indexController.js"></script>
-    <script src="/controller/mystorePageController.js"></script>
-    <script src="/controller/sellPageController.js"></script>
-    <script src="/controller/shopPageController.js"></script>
-    <script src="/controller/itemPageController.js"></script>
+    <script src="assets/js/controller/indexController.js"></script>
+    <script src="assets/js/controller/mystorePageController.js"></script>
+    <script src="assets/js/controller/sellPageController.js"></script>
 
-    <script src="/Service/itemGetService.js"></script>
-    <script src="/Service/ItemCreateService.js"></script>
-    <script src="/Service/itemUpdateService.js"></script>
-    <script src="/Service/dealBuyService.js"></script>
+    <script src="assets/js/Service/itemGetService.js"></script>
 
-    <script src="/Utilities/ethereumUtility.js"></script>
-    <script src="/Utilities/itemParamUtility.js"></script>
-    <script src="/Utilities/fileUtiltty.js"></script>
+    <script src="assets/js/Utilities/ethereumUtility.js"></script>
+    <script src="assets/js/Utilities/itemParamUtility.js"></script> -->
 
 
 </body>

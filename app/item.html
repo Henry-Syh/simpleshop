@@ -1,0 +1,65 @@
+<div class="container">
+    <!-- <header>
+        <h2>Your product details</h2>
+    </header> -->
+    <div class="row aln-center">
+        <div class="col-6 col-12-medium">
+            <section>
+                <form id="itemForm">
+                    <div class="row gtr-50">
+                        <div class="col-12">
+                            <header>
+                                <h2><strong>edit product</strong>!</h2>
+                            </header>
+                        </div>
+
+                        <div class="row aln-center">
+                            <div class="col-12">
+
+                                <section>
+                                    <a href="#" class="image featured"><img src="/images/SimpleShop.png" alt="" /></a>
+                                </section>
+
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <input name="itemNoU" placeholder="Item No" type="text" title="Don't touch me 😘"
+                                disabled />
+                        </div>
+                        <div class="col-12">
+                            <input name="itemNameU" placeholder="Item Name" type="text" required />
+                        </div>
+                        <div class="col-12">
+                            <input name="itemPriceU" placeholder="Item Eth" type="text" required />
+                        </div>
+                        <div class="col-12">
+                            <input name="itemPicU" placeholder="Item pic web" type="text" />
+                        </div>
+                        <div class="col-12">
+                            <select name="itemStatusU">
+                                <option value="" disabled selected hidden>item status</option>
+                                <option value="0">Open</option>
+                                <option value="1">Pending</option>
+                                <option value="2">Sold</option>
+                                <option value="3">Close</option>
+                                <option value="4">Delete</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <a href="#" class="form-button-submit button icon far fa-paper-plane"
+                                onclick="itemPageHappyUpdate()">Happy update</a>
+                        </div>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(async () => {
+
+        await itemPageInitial();
+
+    })
+</script>

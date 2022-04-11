@@ -1,6 +1,6 @@
 .accounts
 
-.secret
+.secrets.json
 
 .deployed_addr
 
