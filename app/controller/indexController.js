@@ -22,6 +22,8 @@ window.addEventListener('load', async () => {
             await pageAlter(true);
         }
 
+        location.reload();
+
     });
 
 });
